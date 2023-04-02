@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Chat App</title>
+  <!-- Added Bootstrap stylesheet -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" integrity="sha512-zFYDjyLq3yXs0sE4bA4YwP/Yyn/Oc0o63OeEzLnWp/H1tOz9EBaKVdD8z1tDwFZtdzQDXDTJtF/kEz+Mn54JyA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" integrity="sha512-CweJvaLAFoDXBfyz5Pzr+MybAxJ1LnEzzh6kHJ6/hUhU6p1dJPcO+JH+wN6FLX9xf/vSZg+8WQ7VORZTJ2k/Gw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     body {
       padding: 0;
@@ -35,61 +43,76 @@
       max-width: 1200px;
       width: 80%;
       display: flex;
+      /* Added Bootstrap classes */
+      border-top: 1px solid #CCC;
+      padding: 10px;
     }
 
     #message-input {
       flex-grow: 1;
+      /* Added Bootstrap classes */
+      margin-right: 10px;
+    }
+
+    /* Added Bootstrap classes */
+    #send-button {
+      width: 100px;
     }
   </style>
 </head>
 <body>
 
     <script type="module">
-                import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
+      import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
 
-                const socket = io("http://localhost:3000");
-                const messageContainer = document.getElementById('message-container')
-const messageForm = document.getElementById('send-container')
-const messageInput = document.getElementById('message-input')
+      const socket = io("http://localhost:3000");
+      const messageContainer = document.getElementById('message-container')
+      const messageForm = document.getElementById('send-container')
+      const messageInput = document.getElementById('message-input')
 
-const name = prompt('What is your name?')
-appendMessage('You joined')
-
-
-socket.on("connect", () => {
-  socket.emit("new-user", name);
-  console.log("connected " + socket.id);
-});
-
-socket.on("chat-message", (message , name) => {
-  appendMessage(`${name}: ${message}`)
-});
+      const name = prompt('What is your name?')
+      appendMessage('You joined')
 
 
-socket.on("user-connected", (name) => {
-  appendMessage(`${name} connected`)
-});
+      socket.on("connect", () => {
+        socket.emit("new-user", name);
+        console.log("connected " + socket.id);
+      });
+
+      socket.on("chat-message", (message , name) => {
+        appendMessage(`${name}: ${message}`)
+      });
 
 
-messageForm.addEventListener('submit', e => {
-  e.preventDefault()
-  const message = messageInput.value
-  socket.emit('send-chat-message', message , name)
-  appendMessage(`You: ${message}`)
-  messageInput.value = ''
-})
+      socket.on("user-connected", (name) => {
+        appendMessage(`${name} connected`)
+      });
 
-function appendMessage(message) {
-  const messageElement = document.createElement('div')
-  messageElement.innerText = message
-  messageContainer.append(messageElement)
-}
+
+      messageForm.addEventListener('submit', e => {
+        e.preventDefault()
+        const message = messageInput.value
+        socket.emit('send-chat-message', message , name)
+        appendMessage(`You: ${message}`)
+        messageInput.value = ''
+      })
+
+      function appendMessage(message) {
+        const messageElement = document.createElement('div')
+        messageElement.innerText = message
+        messageContainer.append(messageElement)
+      }
     </script>
 
-  <div id="message-container"></div>
-  <form id="send-container">
-    <input type="text" id="message-input">
-    <button type="submit" id="send-button">Send</button>
+    <!-- Added Bootstrap container class -->
+    <div class="container">
+      <div id="message-container"></div>
+      <form class="form" id="send-container">
+        <!-- Added Bootstrap form-control class -->
+        <input type="text" id="message-input" class="form-control">
+        <!-- Added Bootstrap btn-primary class -->
+        <button type="submit" id="send-button" class="btn btn-primary">Send</button>
   </form>
+  </div>
 </body>
 </html>
